@@ -21,9 +21,14 @@ export async function importFile(fileContents: string, itemId: number) {
     // 1: If user exists, get user
     const user = await prisma.imperialStudent.upsert({
       where: {
-        cid: record["CID/Card Number"],
+        shortcode: record["Login"],
       },
-      update: {},
+      update: {
+        cid: record["CID/Card Number"],
+        firstName: record["First Name"],
+        lastName: record["Surname"],
+        email: record["Email"],
+      },
       create: {
         cid: record["CID/Card Number"],
         shortcode: record["Login"],

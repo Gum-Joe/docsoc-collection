@@ -2,7 +2,6 @@
 	"prisma": {
 		"seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
 	},
-	"type": "module",
 	"dependencies": {
 		"@fastify/autoload": "^5.10.0",
 		"@fastify/cors": "^9.0.1",
