@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// 1: Model what a user is
+model ImperialStudent {
+  id          Int     @id @default(autoincrement())
+  cid         String  @unique
+  shortcode   String @unique
+
+  firstName   String
+  lastName    String
+  email       String
+
+  // Relations
+  orders      Order[]
+}
+
+// Model an order - by a student, on a date, with many items
+model Order {
+  id          Int     @id @default(autoincrement())
+  orderNo     Int  @unique
+  studentId   Int
+  student     ImperialStudent @relation(fields: [studentId], references: [id])
+  orderDate   DateTime
+
+  // Relations
+  orderItems  OrderItem[]
+}
+
+
+// Each corresponds to a union shop
+model RootItem {
+  id          Int     @id @default(autoincrement())
+  name        String
+
+  // Relations
+  variants       Variant[]
+}
+
+// Item variants -> this is what we order
+model Variant {
+  id          Int     @id @default(autoincrement())
+  variantName String
+
+  rootItemId  Int
+  rootItem    RootItem @relation(fields: [rootItemId], references: [id])
+
+  // Relations
+  ordersWithItem  OrderItem[]
+}
+
+
+// Order items
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  orderId     Int
+  order       Order @relation(fields: [orderId], references: [id])
+
+  quantity    Int
+
+  variantId   Int
+  variant     Variant @relation(fields: [variantId], references: [id])
+
+  collected   Boolean
+}
