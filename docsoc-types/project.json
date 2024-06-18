@@ -1,0 +1,9 @@
+{
+  "name": "docsoc-types",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "docsoc-types/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project docsoc-types --web",
+  "targets": {}
+}

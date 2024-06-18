@@ -45,7 +45,7 @@ model Order {
 // Each corresponds to a union shop
 model RootItem {
   id          Int     @id @default(autoincrement())
-  name        String
+  name        String  @unique
 
   // Relations
   variants       Variant[]
@@ -61,6 +61,8 @@ model Variant {
 
   // Relations
   ordersWithItem  OrderItem[]
+
+  @@unique([variantName, rootItemId])
 }
 
 
