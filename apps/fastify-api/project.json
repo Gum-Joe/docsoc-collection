@@ -51,6 +51,9 @@
           "buildTarget": "fastify-api:build:production"
         }
       }
+    },
+    "docker-build": {
+      "command": "docker build -f apps/fastify-api/Dockerfile . -t gumjoe/docsoc-collection-api"
     }
   }
 }

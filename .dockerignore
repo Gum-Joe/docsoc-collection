@@ -1,0 +1,8 @@
+dist
+dumps
+node_modules
+tmp
+data
+apps/fastify-api/data
+apps/fastify-api/node_modules
+apps/fastify-api/dist

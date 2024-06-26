@@ -1,4 +1,43 @@
-# ReactMonorepo
+# DoCSoc Collection
+This monorepo contains the code for running a basic DoCSoc merchandise collection management website.
+
+It allows:
+1. For data to be loaded in from eActivities
+2. For this data to be searched by shortcode, and a table of items the buyer associated with the shortcode returned
+3. For the items to be marked as collected
+
+## Core projects
+1. `apps/docsoc-collction` - The frontend, using vite to bundle a react TypeScript (TSX) app that uses axios for requests
+2. `apps/fastify-api` - The TypeScript backend, which uses fastify to prodice CRUD on the database using the prisma ORM
+3. All this is (sort of) managed through nx (a monorepo manager)
+
+## NOTE
+The author wrote this in the 3 hours he had before the first summer 2024 merch collection, using ChatGPT for some parts. It is therefore far from perfect, and may be messy/sloppy in some places. However it does work
+
+## Quick Start
+I took the liberty of setting up a docker-compose file, to make everything easier.
+
+These steps **assume you have a prexisting database dump to use**!
+1. Install docker and docker-compose on your machine (usually docker should include docker compose now - check by running `docker compose --help`)
+2. Run `docker compose up --build` in the root of the repo
+3. In another terminal, run `docker exec -i $(docker ps -qf "name=docsoc-collection-postgres" | head -n1) psql postgres://user:password@docsoc-collection-postgres:5432/docsoc-collection -f - < ./path/to/database/dump.sql` to import data
+
+## Usage of the app
+Navigate to `localhost:4200` as this is where the app's frontend is hosted (the backend is on port 4040).
+
+![Image of the UI](assets/image.png)
+The application allows you to search a shortcode at the top, and see the items associated with that shortcode in the table below (both the item name and the variant, which should then cross-reference with any information about what box those items are in). You can then mark items as collected by clicking the checkbox.
+
+Below, you can select an item (e.g. Yellow Zoodies, Laptop Sleeves, Pride T-shirt etc.) and then provide a CSV from eActivities for the corresponding Union Shop Product to update the database. The system is clever and knows which rows in the CSV has been provided previously and which need to be inserted into the database, and will also make item variants as and when it sees them in the CSVs. The only thing it can't do is infer the list of items, which will have to be added via a prisma database seed (see `apps/fastify-api/prisma/seed.ts` for an example).
+
+**NOTE:** There is no undo for the upload file option, and date added is not currently tracked in the DB. What this means is that if you select an item and then upload the wrong CSV, it is effectively _impossible_ to undo this action without manually working out which rows to remove. For this reason I advise taking a database dump as a backup before running the upload file option, using `pg_dump` or similar:
+```bash
+docker exec -i $(docker ps -qf "name=docsoc-collection-postgres" | head -n1) pg_dump --user user docsoc-collection > backup.sql
+```
+(enter `password`  as the password when prompted)
+
+
+# Original Nx README
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 

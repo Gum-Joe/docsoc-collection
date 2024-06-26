@@ -1,0 +1,36 @@
+# 3 apps:
+# 1. gumjoe/docsoc-collection, image from Dockerfile apps/docsoc-collction, context ., port 4020
+# 2. gumjoe/docsoc-collection-api, image from Dockerfile apps/fastify-api, context ., port 4040
+# 3. a Postgres DB for 2., passed to 2. in the DATABASE_URL env variable
+
+version: '3.8'
+services:
+  docsoc-collection:
+    image: gumjoe/docsoc-collection
+    build:
+      context: .
+      dockerfile: apps/docsoc-collction/Dockerfile
+    ports:
+      - "4200:4200"
+
+  docsoc-collection-api:
+    image: gumjoe/docsoc-collection-api
+    build:
+      context: .
+      dockerfile: apps/fastify-api/Dockerfile
+    ports:
+      - "4040:4040"
+    environment:
+      DATABASE_URL: postgres://user:password@docsoc-collection-postgres:5432/docsoc-collection
+
+  docsoc-collection-postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: docsoc-collection
+    volumes:
+      - docsoc-collection-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  docsoc-collection-postgres-data:

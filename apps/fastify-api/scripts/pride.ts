@@ -103,7 +103,7 @@ async function main(fileName: string) {
 	
 }
 
-main("./data/Pride Lanyard 18.06.24.csv")
+main("./data/Pride Lanyard 26.06.24.csv")
 	.then(async () => {
 		await prisma.$disconnect();
 	})

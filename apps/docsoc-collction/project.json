@@ -4,6 +4,15 @@
   "sourceRoot": "apps/docsoc-collction/src",
   "projectType": "application",
   "tags": [],
-  "// targets": "to see all targets run: nx show project docsoc-collction --web",
-  "targets": {}
+  "targets": {
+    "docker-build": {
+      "command": "docker build -f apps/docsoc-collction/Dockerfile . -t gumjoe/docsoc-collection"
+    },
+    "serve-static": {
+      "options": {
+        "port": 4200,
+        "host": "0.0.0.0"
+      }
+    }
+  }
 }
